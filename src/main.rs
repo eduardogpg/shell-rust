@@ -39,9 +39,9 @@ fn main() {
         let mut input = String::new();
         stdin().read_line(&mut input).unwrap();
 
-        let mut previous_command = Vec::new();
-
         if input != "\n" {
+            
+            // let mut previous_command = Vec::new();
             
             let mut commands = input.trim().split(" | ");
 
@@ -58,21 +58,21 @@ fn main() {
                     quit = true;
                     println!("Bye! 👻");
                 }else{
+                    let mut stdinput = Stdio::null();
 
-                    // let s = match str::from_utf8(previous_command) {
-                    //     Ok(v) => v,
-                    //     Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
-                    // };
-                    
                     let output = Command::new(command_to_execute)
                         .args(args)
-                        .output()
-                        .expect("No es posible completar la operación.");
-                        //.spawn();
-                    
-                    previous_command = output.stdout;
+                        .stdin(stdinput)
+                        .spawn();
 
-                    //println!("{:?}", previous_command)
+                    match output {
+                        Ok(output) => { println!("Comando ejecutado exitosamente!") },
+                        Err(e) => {
+                            println!("No es posible ejecutar el comando!")
+                        },
+                    };
+
+                   
                 }
             }
         }
